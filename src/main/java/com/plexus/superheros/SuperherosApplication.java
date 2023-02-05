@@ -8,7 +8,6 @@ public class SuperherosApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SuperherosApplication.class, args);
-		System.out.println("Hola super heroes!!");
 	}
 
 }

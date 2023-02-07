@@ -1,22 +1,22 @@
 package com.plexus.superheros.service;
 
-import com.plexus.superheros.entity.Superhero;
+import com.plexus.superheros.dto.SuperheroDTO;
+import com.plexus.superheros.model.Superhero;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
 
 public interface SuperherosService {
 
-  Superhero saveHero(Superhero superhero);
+  SuperheroDTO saveHero(Superhero superhero);
 
-  Optional<Superhero> findSuperheroById(Long id);
+  Optional<SuperheroDTO> findSuperheroById(Long id);
 
-  Superhero modifySuperhero(Long id, Superhero superhero);
+  SuperheroDTO modifySuperhero(SuperheroDTO superheroDTO);
 
   boolean deleteSuperhero (Long id);
 
-  List<Superhero> getAllSuperheros();
+  List<SuperheroDTO> getAllSuperheros();
 
-  List<Superhero> findByName(String name);
+  List<SuperheroDTO> findByName(String name);
 
 }

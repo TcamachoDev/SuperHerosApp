@@ -1,9 +1,11 @@
 package com.plexus.superheros.controller;
 
-import static com.plexus.superheros.constants.Constants.ID;
 import static com.plexus.superheros.constants.Constants.URL_SUPERHEROE;
 
-import com.plexus.superheros.entity.Superhero;
+import com.plexus.superheros.controller.util.ResponseUtil;
+import com.plexus.superheros.mappers.SuperheroMapper;
+import com.plexus.superheros.model.Superhero;
+import com.plexus.superheros.dto.SuperheroDTO;
 import com.plexus.superheros.service.SuperherosService;
 import java.util.List;
 import java.util.Optional;
@@ -26,35 +28,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(URL_SUPERHEROE)
 public class SuperherosController {
 
-  @Autowired
-  SuperherosService superherosService;
+  @Autowired private SuperherosService superherosService;
 
   @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<List<Superhero>> getAllSuperheros() {
-    return new ResponseEntity<>(superherosService.getAllSuperheros(), HttpStatus.OK);
+  public List<SuperheroDTO> getAllSuperheros() {
+    return superherosService.getAllSuperheros();
   }
 
   @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<Superhero> saveSuperhero(@RequestBody Superhero superhero){
-    return new ResponseEntity<>(superherosService.saveHero(superhero), HttpStatus.CREATED);
+  public ResponseEntity<SuperheroDTO> createdSuperhero(@RequestBody Superhero superhero){
+    return ResponseEntity.ok().body(superherosService.saveHero(superhero));
+//    return new ResponseEntity<>(superherosService.saveHero(superhero), HttpStatus.CREATED);
   }
 
-  @GetMapping( path = ID,
+  @GetMapping( path = "findById/{id}",
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<Optional<Superhero>> getSuperhero(@PathVariable("id") Long id){
-    return new ResponseEntity<>(superherosService.findSuperheroById(id), HttpStatus.OK);
+  public ResponseEntity<SuperheroDTO> findById(@PathVariable("id") Long id){
+    return ResponseUtil.wrapOrNotFound(superherosService.findSuperheroById(id));
   }
 
-  @PutMapping(path = ID,
+  @PutMapping(path = "update/{id}",
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<Superhero> modifySuperhero(@PathVariable("id") Long id, @RequestBody Superhero superhero){
-    return new ResponseEntity<>(superherosService.modifySuperhero(id, superhero), HttpStatus.OK);
+  public ResponseEntity<SuperheroDTO> modifySuperhero(@RequestBody SuperheroDTO superhero){
+    return new ResponseEntity<>(superherosService.modifySuperhero(superhero), HttpStatus.OK);
   }
 
   @DeleteMapping(path = "delete/{id}",
       produces = {MediaType.APPLICATION_JSON_VALUE})
   @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-  public ResponseEntity<Superhero> deleteSuperhero(@PathVariable("id") Long id){
+  public ResponseEntity<SuperheroDTO> deleteSuperhero(@PathVariable("id") Long id){
     boolean response = superherosService.deleteSuperhero(id);
     if(response){
       return new ResponseEntity<>(HttpStatus.OK);
@@ -65,7 +67,7 @@ public class SuperherosController {
 
   @GetMapping( path = "findByName/{name}",
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<List<Superhero>> findByName(@PathVariable("name") String name){
-    return new ResponseEntity<>(superherosService.findByName(name), HttpStatus.OK);
+  public List<SuperheroDTO> findByName(@PathVariable("name") String name){
+    return superherosService.findByName(name);
   }
 }

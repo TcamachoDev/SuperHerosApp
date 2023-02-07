@@ -1,6 +1,6 @@
 package com.plexus.superheros.repository;
 
-import com.plexus.superheros.entity.Superhero;
+import com.plexus.superheros.model.Superhero;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

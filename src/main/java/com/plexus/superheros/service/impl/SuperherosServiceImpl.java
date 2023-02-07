@@ -1,49 +1,45 @@
 package com.plexus.superheros.service.impl;
 
-import com.plexus.superheros.entity.Superhero;
+import com.plexus.superheros.dto.SuperheroDTO;
+import com.plexus.superheros.mappers.SuperheroMapper;
+import com.plexus.superheros.model.Superhero;
 import com.plexus.superheros.repository.SuperheroRepository;
 import com.plexus.superheros.service.SuperherosService;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service("superHeroesService")
+@Service
+@AllArgsConstructor
 public class SuperherosServiceImpl implements SuperherosService {
 
-  @Autowired SuperheroRepository superheroRepository;
+  private final SuperheroRepository superheroRepository;
+
+  private final SuperheroMapper superheroMapper;
 
   @Override
-  public Superhero saveHero(Superhero superhero) {
+  public SuperheroDTO saveHero(Superhero superhero) {
     log.info("Save New super Hero : " + superhero.toString());
-    return superheroRepository.save(superhero);
+    return superheroMapper.toDto(superheroRepository.save(superhero));
   }
 
   @Override
-  public Optional<Superhero> findSuperheroById(Long id) {
+  public Optional<SuperheroDTO> findSuperheroById(Long id) {
 
     log.info("Find by Id Super Hero : " + id);
-    return Optional.ofNullable(
-        superheroRepository
-            .findById(id)
-            .orElseThrow(
-                () -> {
-                  log.error("Entity not found");
-                  throw new EntityNotFoundException();
-                }));
+    return superheroRepository.findById(id).map(superheroMapper::toDto);
   }
 
   @Override
-  public Superhero modifySuperhero(Long id, Superhero superhero) {
-    Superhero modifySuperhero = superheroRepository.findById(id).orElseThrow(
-        EntityNotFoundException::new);
-      modifySuperhero.setName(superhero.getName());
-      modifySuperhero.setSuperpower(superhero.getSuperpower());
-    log.info("Modified Super Hero : " + modifySuperhero);
-      return superheroRepository.save(modifySuperhero);
+  public SuperheroDTO modifySuperhero(SuperheroDTO superheroDTO) {
+    Superhero superheroModify = superheroRepository.save(superheroMapper.toEntity(superheroDTO));
+    log.info("Modified Super Hero : " + superheroModify);
+    return superheroMapper.toDto(superheroModify);
   }
 
   @Override
@@ -59,13 +55,16 @@ public class SuperherosServiceImpl implements SuperherosService {
   }
 
   @Override
-  public List<Superhero> getAllSuperheros() {
-    return superheroRepository.findAll();
+  public List<SuperheroDTO> getAllSuperheros() {
+    return superheroRepository.findAll().stream()
+        .map(superheroMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
   }
 
   @Override
-  public List<Superhero> findByName(String name) {
-    return superheroRepository.findAllByNameContainsIgnoreCase(name);
+  public List<SuperheroDTO> findByName(String name) {
+    return superheroRepository.findAllByNameContainsIgnoreCase(name).stream()
+        .map(superheroMapper::toDto)
+        .collect(Collectors.toCollection(LinkedList::new));
   }
-
 }

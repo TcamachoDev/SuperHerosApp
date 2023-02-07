@@ -11,16 +11,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "SUPERHERO")
 public class Superhero {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false)
+  @Column(name = "NAME_HEROE", nullable = false)
   private String name;
+  @Column(name = "SUPERPOWER")
   private String superpower;
 }

@@ -1,7 +1,9 @@
 package com.plexus.superheros.service;
 
 import com.plexus.superheros.entity.Superhero;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 public interface SuperherosService {
 
@@ -13,4 +15,5 @@ public interface SuperherosService {
 
   boolean deleteSuperhero (Long id);
 
+  List<Superhero> getAllSuperheros();
 }

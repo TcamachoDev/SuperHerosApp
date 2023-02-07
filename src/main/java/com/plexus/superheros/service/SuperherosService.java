@@ -16,4 +16,7 @@ public interface SuperherosService {
   boolean deleteSuperhero (Long id);
 
   List<Superhero> getAllSuperheros();
+
+  List<Superhero> findByName(String name);
+
 }

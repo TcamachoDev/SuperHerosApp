@@ -8,9 +8,7 @@ import com.plexus.superheros.service.SuperherosService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,8 +30,8 @@ public class SuperherosController {
   SuperherosService superherosService;
 
   @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-  public List<Superhero> getAllSuperheros() {
-    return superherosService.getAllSuperheros();
+  public ResponseEntity<List<Superhero>> getAllSuperheros() {
+    return new ResponseEntity<>(superherosService.getAllSuperheros(), HttpStatus.OK);
   }
 
   @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -65,5 +61,11 @@ public class SuperherosController {
     }else{
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+  }
+
+  @GetMapping( path = "findByName/{name}",
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public ResponseEntity<List<Superhero>> findByName(@PathVariable("name") String name){
+    return new ResponseEntity<>(superherosService.findByName(name), HttpStatus.OK);
   }
 }

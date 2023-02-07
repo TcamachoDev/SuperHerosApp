@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -26,6 +24,7 @@ public class SuperherosServiceImpl implements SuperherosService {
 
   @Override
   public Optional<Superhero> findSuperheroById(Long id) {
+
     log.info("Find by Id Super Hero : " + id);
     return Optional.ofNullable(
         superheroRepository
@@ -62,6 +61,11 @@ public class SuperherosServiceImpl implements SuperherosService {
   @Override
   public List<Superhero> getAllSuperheros() {
     return superheroRepository.findAll();
+  }
+
+  @Override
+  public List<Superhero> findByName(String name) {
+    return superheroRepository.findAllByNameContainsIgnoreCase(name);
   }
 
 }

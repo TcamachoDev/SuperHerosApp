@@ -1,4 +1,4 @@
-package com.plexus.superheros.controller.util;
+package com.plexus.superheros.util;
 
 import java.util.Optional;
 import org.springframework.http.HttpHeaders;

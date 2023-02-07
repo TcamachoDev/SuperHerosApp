@@ -1,14 +1,19 @@
-package com.plexus.superheros.controller;
+package com.plexus.superheros;
 
+import static com.plexus.superheros.constants.Constants.SWG_CREATE;
+import static com.plexus.superheros.constants.Constants.SWG_DELETE;
+import static com.plexus.superheros.constants.Constants.SWG_FIND_ALL;
+import static com.plexus.superheros.constants.Constants.SWG_FIND_BY_ID;
+import static com.plexus.superheros.constants.Constants.SWG_FIND_BY_NAME;
+import static com.plexus.superheros.constants.Constants.SWG_UPDATE;
 import static com.plexus.superheros.constants.Constants.URL_SUPERHEROE;
 
-import com.plexus.superheros.controller.util.ResponseUtil;
-import com.plexus.superheros.mappers.SuperheroMapper;
-import com.plexus.superheros.model.Superhero;
+import com.plexus.superheros.util.ResponseUtil;
 import com.plexus.superheros.dto.SuperheroDTO;
-import com.plexus.superheros.service.SuperherosService;
+import com.plexus.superheros.model.Superhero;
+import com.plexus.superheros.service.SuperHerosService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,48 +31,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(URL_SUPERHEROE)
-public class SuperherosController {
+@Tag(name = "SuperHeros API", description = "CRUD the superheros")
+public class SuperHerosController {
 
-  @Autowired private SuperherosService superherosService;
+  @Autowired private SuperHerosService superherosService;
 
-  @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+  @GetMapping(
+      path = SWG_FIND_ALL,
+      produces = {MediaType.APPLICATION_JSON_VALUE})
   public List<SuperheroDTO> getAllSuperheros() {
     return superherosService.getAllSuperheros();
   }
 
-  @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<SuperheroDTO> createdSuperhero(@RequestBody Superhero superhero){
+  @PostMapping(
+      path = SWG_CREATE,
+      produces = {MediaType.APPLICATION_JSON_VALUE})
+  public ResponseEntity<SuperheroDTO> createdSuperhero(@RequestBody Superhero superhero) {
     return ResponseEntity.ok().body(superherosService.saveHero(superhero));
-//    return new ResponseEntity<>(superherosService.saveHero(superhero), HttpStatus.CREATED);
   }
 
-  @GetMapping( path = "findById/{id}",
+  @GetMapping(
+      path = SWG_FIND_BY_ID,
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<SuperheroDTO> findById(@PathVariable("id") Long id){
+  public ResponseEntity<SuperheroDTO> findById(@PathVariable("id") Long id) {
     return ResponseUtil.wrapOrNotFound(superherosService.findSuperheroById(id));
   }
 
-  @PutMapping(path = "update/{id}",
+  @PutMapping(
+      path = SWG_UPDATE,
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<SuperheroDTO> modifySuperhero(@RequestBody SuperheroDTO superhero){
+  public ResponseEntity<SuperheroDTO> modifySuperhero(@RequestBody SuperheroDTO superhero) {
     return new ResponseEntity<>(superherosService.modifySuperhero(superhero), HttpStatus.OK);
   }
 
-  @DeleteMapping(path = "delete/{id}",
+  @DeleteMapping(
+      path = SWG_DELETE,
       produces = {MediaType.APPLICATION_JSON_VALUE})
   @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-  public ResponseEntity<SuperheroDTO> deleteSuperhero(@PathVariable("id") Long id){
+  public ResponseEntity<SuperheroDTO> deleteSuperhero(@PathVariable("id") Long id) {
     boolean response = superherosService.deleteSuperhero(id);
-    if(response){
+    if (response) {
       return new ResponseEntity<>(HttpStatus.OK);
-    }else{
+    } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
-  @GetMapping( path = "findByName/{name}",
+  @GetMapping(
+      path = SWG_FIND_BY_NAME,
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public List<SuperheroDTO> findByName(@PathVariable("name") String name){
+  public List<SuperheroDTO> findByName(@PathVariable("name") String name) {
     return superherosService.findByName(name);
   }
 }

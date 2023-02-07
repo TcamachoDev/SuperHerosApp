@@ -5,7 +5,7 @@ import com.plexus.superheros.model.Superhero;
 import java.util.List;
 import java.util.Optional;
 
-public interface SuperherosService {
+public interface SuperHerosService {
 
   SuperheroDTO saveHero(Superhero superhero);
 

@@ -3,8 +3,8 @@ package com.plexus.superheros.service.impl;
 import com.plexus.superheros.dto.SuperheroDTO;
 import com.plexus.superheros.mappers.SuperheroMapper;
 import com.plexus.superheros.model.Superhero;
-import com.plexus.superheros.repository.SuperheroRepository;
-import com.plexus.superheros.service.SuperherosService;
+import com.plexus.superheros.repository.SuperHeroRepository;
+import com.plexus.superheros.service.SuperHerosService;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class SuperherosServiceImpl implements SuperherosService {
-
-  private final SuperheroRepository superheroRepository;
-
+public class SuperHerosServiceImpl implements SuperHerosService {
+  private final SuperHeroRepository superheroRepository;
   private final SuperheroMapper superheroMapper;
 
   @Override

@@ -28,7 +28,6 @@ public class SuperHerosServiceImpl implements SuperHerosService {
 
   @Override
   public Optional<SuperheroDTO> findSuperheroById(Long id) {
-
     log.info("Find by Id Super Hero : " + id);
     return superheroRepository.findById(id).map(superheroMapper::toDto);
   }
